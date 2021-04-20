@@ -60,12 +60,14 @@ class particle():
                         cls.y_list1.append(y)
                         cls.z_list1.append(z)
                 return (cls.x_list1,cls.y_list1,cls.z_list1)
-                        
+####################################
+def force(object1,object2):
+    return (ax,ay,az)
 
 def create():           
     lists=[]
     for i in range(100):
-            lists.append(particle((10*np.random.random(),10*np.random.random(),10*np.random.random()),(np.random.random(),np.random.random(),np.random.random())))
+            lists.append(particle((0.009*np.random.randint(-1000,1000),0.009*np.random.randint(-1000,1000),0.009*np.random.randint(-1000,1000)),(np.random.randint(-1,1),np.random.randint(-1,1),np.random.randint(-1,1))))
 
 def run():
         create()
@@ -79,8 +81,8 @@ def update_coordinate(i,scatter):
         ax.set_xlim3d([-11,11])
         ax.set_ylim3d([-11,11])
         ax.set_zlim3d([-11,11])
+        ax.set_axis_off()
         scatter[0]=ax.scatter3D(x,y,z,color='green')
-        
 
         
 import matplotlib.pyplot as plt
