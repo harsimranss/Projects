@@ -1,5 +1,5 @@
 import numpy as np
-
+#hoi friend
 class particle():
     objects=[]
     def __init__(self,position,velocity):
