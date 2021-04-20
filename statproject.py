@@ -9,9 +9,6 @@ class particle():
         self.accelaration=(0,0,0)
         particle.objects.append(self)
 
-    def check(self):
-        print(self.position)
-        print(self.velocity)
     @classmethod
     def update(cls):
         
