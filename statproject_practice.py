@@ -14,7 +14,8 @@ class particle():
 
     @classmethod
     def update(cls):
-        t=0.01
+        t=0.1
+        particle.update_ac()
         for obj in cls.objects:
             x, y, z = obj.position
             vx, vy, vz = obj.velocity
@@ -35,7 +36,8 @@ class particle():
 
             vx, vy, vz = obj.velocity
             ax, ay, az = obj.accelatation
-            obj.accelatation = obj.force()
+            #removing
+            'obj.accelatation = obj.force()'
             obj.position = (x + t * vx, y + t * vy, z + t * vz)
             obj.velocity = (vx + obj.accelatation[0] * t, vy + obj.accelatation[1] * t, vz + obj.accelatation[2] * t)
 
@@ -45,9 +47,10 @@ class particle():
         for obj in particle.objects:
             x, y, z = obj.position
             if self.position != obj.position:
-                r=(x-x0)^2+(y-y0)^2 + (z-z0)^2
-                f = (f[0] + (x-x0)/r, f[1] + (y - y0)/r, f[2] +(z - z0)/r)
-        return f
+                r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(1.5)
+                f = (f[0] -10*(x-x0)/r, f[1] - 10*(y - y0)/r, f[2] - 10*(z - z0)/r)
+        # changing accelaration so as to not calculate force for future config.
+        self.accelaration=f
             
 
     @classmethod
@@ -57,7 +60,11 @@ class particle():
             vx, vy, vz = obj.velocity
             e = e + vx**2 + vy**2 + vz**2
         return('Energy: ', e)
-
+    # creating function to update acceleration
+    @classmethod
+    def update_ac(cls):
+        for obj in cls.objects:
+            obj.force()
     x_list = []
     y_list = []
     z_list = []
@@ -79,7 +86,7 @@ class particle():
 
 def create():
     lists = []
-    for i in range(5):
+    for i in range(50):
         x = 10 * rd.random()
         y = 10 * rd.random()
         z = 10 * rd.random()
