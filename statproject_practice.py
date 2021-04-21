@@ -44,11 +44,13 @@ class particle():
 
     def force(self):
         f = (0, 0, 0)
+        R = 1 # boundary of neighbourhood
         x0, y0, z0 = self.position
         for obj in particle.objects:
             x, y, z = obj.position
-            if self.position != obj.position:
-                r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(1.5)
+            r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(1.5)
+            if self.position != obj.position and r < R:
+                
                 f = (f[0] +10*(x-x0)/r, f[1] +10*(y - y0)/r, f[2] + 10*(z - z0)/r)
         # changing accelaration so as to not calculate force for future config.
         self.accelaration=f
@@ -87,7 +89,7 @@ class particle():
 
 def create():
     lists = []
-    for i in range(100):
+    for i in range(1000):
         x =  0.01*rd.randint(-1000,1000)
         y = 0.01*rd.randint(-1000,1000)
         z = 0.01*rd.randint(-1000,1000)
