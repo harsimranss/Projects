@@ -14,6 +14,7 @@ class particle():
 
     @classmethod
     def update(cls):
+        t=0.01
         for obj in cls.objects:
             x, y, z = obj.position
             vx, vy, vz = obj.velocity
@@ -35,8 +36,8 @@ class particle():
             vx, vy, vz = obj.velocity
             ax, ay, az = obj.accelatation
             obj.accelatation = obj.force()
-            obj.position = (x + 0.1 * vx, y + 0.1 * vy, z + 0.1 * vz)
-            obj.velocity = (vx + obj.accelatation[0] * 0.1, vy + obj.accelatation[1] * 0.1, vz + obj.accelatation[2] * 0.1)
+            obj.position = (x + t * vx, y + t * vy, z + t * vz)
+            obj.velocity = (vx + obj.accelatation[0] * t, vy + obj.accelatation[1] * t, vz + obj.accelatation[2] * t)
 
     def force(self):
         f = (0, 0, 0)
@@ -44,7 +45,8 @@ class particle():
         for obj in particle.objects:
             x, y, z = obj.position
             if self.position != obj.position:
-                f = (f[0] + 1/(x - x0), f[1] + 1/(y - y0), f[2] +1/(z - z0))
+                r=(x-x0)^2+(y-y0)^2 + (z-z0)^2
+                f = (f[0] + (x-x0)/r, f[1] + (y - y0)/r, f[2] +(z - z0)/r)
         return f
             
 
