@@ -15,6 +15,7 @@ class particle():
     @classmethod
     def update(cls):
         t=0.1
+        # updating accelaration before updating coordinates
         particle.update_ac()
         for obj in cls.objects:
             x, y, z = obj.position
