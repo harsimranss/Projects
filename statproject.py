@@ -37,9 +37,9 @@ class particle():
     def energy(cls):
         e=0
         for obj in cls.objects:
-            e=e+obj.velocity[1]**2+obj.velocity[1]**2+obj.velocity[2]**2
+            e=e+obj.velocity[0]**2+obj.velocity[1]**2+obj.velocity[2]**2
         return ('Energy',e)
-            
+    
     @classmethod
     def show(cls):
         for obj in cls.objects:
@@ -69,10 +69,6 @@ def create():
     for i in range(100):
             lists.append(particle((0.009*np.random.randint(-1000,1000),0.009*np.random.randint(-1000,1000),0.009*np.random.randint(-1000,1000)),(np.random.randint(-1,1),np.random.randint(-1,1),np.random.randint(-1,1))))
 
-def run():
-        create()
-        animate_system()
-        
 
 def update_coordinate(i,scatter):
         particle.update()
@@ -83,9 +79,15 @@ def update_coordinate(i,scatter):
         ax.set_zlim3d([-11,11])
         ax.set_axis_off()
         scatter[0]=ax.scatter3D(x,y,z,color='green')
+import time
+t1=time.process_time()
+print(t1)
+for j in range(1000000):
+    particle.update()
+print(time.process_time()-t1)
 
         
-import matplotlib.pyplot as plt
+'''import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as mp
 import matplotlib.animation as animation
 print(particle.energy())
@@ -101,6 +103,6 @@ x,y,z=particle.getcoordinate()
 scatter=[ax.scatter3D(x,y,z,color='green')]
 
 anim=animation.FuncAnimation(fig,update_coordinate,40,fargs=(scatter,),interval=50)
-plt.show()
+plt.show()'''
 
 
