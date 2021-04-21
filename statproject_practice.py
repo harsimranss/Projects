@@ -18,12 +18,19 @@ class particle():
             x, y, z = obj.position
             vx, vy, vz = obj.velocity
             
-            if x > 10 or x < -10:
-                obj.velocity = (-vx, vy, vz)
-            if y > 10 or y < -10:
-                obj.velocity = (vx, -vy, vz) 
-            if z > 10 or z < -10:
-                obj.velocity = (vx, vy, -vz)
+            if x>10:
+                obj.velocity=(-abs(obj.velocity[0]),obj.velocity[1],obj.velocity[2])
+            if y>10:
+                obj.velocity=(obj.velocity[0],-abs(obj.velocity[1]),obj.velocity[2])
+            if z>10:
+                obj.velocity=(obj.velocity[0],obj.velocity[1],-abs(obj.velocity[2]))
+            if x<-10:
+                obj.velocity=(abs(obj.velocity[0]),obj.velocity[1],obj.velocity[2])
+            if y<-10:
+                obj.velocity=(obj.velocity[0],abs(obj.velocity[1]),obj.velocity[2])
+            if z<-10:
+                obj.velocity=(obj.velocity[0],obj.velocity[1],abs(obj.velocity[2]))
+          
 
             vx, vy, vz = obj.velocity
             ax, ay, az = obj.accelatation
@@ -37,7 +44,7 @@ class particle():
         for obj in particle.objects:
             x, y, z = obj.position
             if self.position != obj.position:
-                f = (f[0] + 1/(x - x0), f[1] + 1/(y - y0), f[2] - 1/(z - z0))
+                f = (f[0] + 1/(x - x0), f[1] + 1/(y - y0), f[2] +1/(z - z0))
         return f
             
 
