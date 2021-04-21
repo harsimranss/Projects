@@ -49,7 +49,7 @@ class particle():
             x, y, z = obj.position
             if self.position != obj.position:
                 r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(1.5)
-                f = (f[0] -10*(x-x0)/r, f[1] - 10*(y - y0)/r, f[2] - 10*(z - z0)/r)
+                f = (f[0] +10*(x-x0)/r, f[1] +10*(y - y0)/r, f[2] + 10*(z - z0)/r)
         # changing accelaration so as to not calculate force for future config.
         self.accelaration=f
             
@@ -87,13 +87,13 @@ class particle():
 
 def create():
     lists = []
-    for i in range(50):
-        x = 10 * rd.random()
-        y = 10 * rd.random()
-        z = 10 * rd.random()
-        vx = rd.random()
-        vy = rd.random()
-        vz = rd.random()
+    for i in range(100):
+        x =  0.01*rd.randint(-1000,1000)
+        y = 0.01*rd.randint(-1000,1000)
+        z = 0.01*rd.randint(-1000,1000)
+        vx = 0.01*rd.randint(-100,100)
+        vy = 0.01*rd.randint(-100,100)
+        vz = 0.01*rd.randint(-100,100)
         
         lists.append(particle((x, y, z), (vx, vy, vz)))
 
@@ -114,9 +114,9 @@ create()
 print(particle.energy())
 fig=plt.figure()
 ax = plt.axes(projection ="3d")
-ax.set_xlim3d([0,5])
-ax.set_ylim3d([0,5])
-ax.set_zlim3d([0,5])
+ax.set_xlim3d([-11,11])
+ax.set_ylim3d([-11,11])
+ax.set_zlim3d([-11,11])
 ax.set_title("Scatter Animation")
 x,y,z=particle.getcoordinate()
 scatter=[ax.scatter3D(x,y,z,color='green')]
