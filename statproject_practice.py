@@ -11,13 +11,14 @@ class particle():
         self.velocity = velocity
         self.accelaration = (0, 0, 0)
         self.neighbours = []
+        self.da=(0,0,0)
         particle.objects.append(self)
 
     @classmethod
     def update(cls):
-        t=0.01
+        t=0.001
         # updating neighbours
-        if particle.time%5==0:
+        if particle.time%20==0:
             particle.update_neighbours()
         # updating accelaration before updating coordinates
         particle.update_ac()
@@ -43,20 +44,20 @@ class particle():
             ax, ay, az = obj.accelaration
             #removing
             'obj.accelatation = obj.force()'
-            obj.position = (x + t * vx, y + t * vy, z + t * vz)
+            obj.position = (x + t * vx+0.5*ax*t*t, y + t * vy+0.5*ay*t*t, z + t * vz+0.5*az*t*t)
             vx=vx + obj.accelaration[0] * t
             vy=vy + obj.accelaration[1] * t
             vz=vz+obj.accelaration[2] * t
             obj.velocity = (vx,vy,vz)
-            particle.time=particle.time+1
+        particle.time=particle.time+1
     def force(self):
         f = (0, 0, 0)
         R = 1 # boundary of neighbourhood
         x0, y0, z0 = self.position
         for obj in self.neighbours:
             x, y, z = obj.position
-            r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(1.5)
-            f = (f[0] -1*(x-x0)/r, f[1] -1*(y - y0)/r, f[2] - 1*(z - z0)/r)
+            r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(3.5)
+            f = (f[0] -2*(x-x0)/r, f[1] -2*(y - y0)/r, f[2] - 2*(z - z0)/r)
         # changing accelaration so as to not calculate force for future config.
         self.accelaration=f
 
@@ -77,7 +78,7 @@ class particle():
         for obj in cls.objects:
             vx, vy, vz = obj.velocity
             e = e + vx**2 + vy**2 + vz**2
-        return('Energy: ', e)
+        return e
     # creating function to update acceleration
     @classmethod
     def update_ac(cls):
@@ -116,7 +117,7 @@ class particle():
 
 def create():
     lists = []
-    for i in range(1000):
+    for i in range(300):
         x = 0.02*rd.randint(-1000,1000)
         y = 0.02*rd.randint(-1000,1000)
         z = 0.02*rd.randint(-1000,1000)
@@ -128,22 +129,36 @@ def create():
 create()
 data_set=[]
 print('Working On it!!')
+## Changing Directory
 import os
 os.chdir('/home/sarhandi/stat')
+
+## creating velocity distribution data of initial values
 particle.velocity_distribution1()
-for pp in range(1000):
+print('initial',particle.energy()/1500)
+### Simulating system and saving it in data set
+for pp in range(20000):
 	particle.update()
-	data_set.append(particle.getcoordinate())
+	if particle.time%5==0:
+            data_set.append(particle.getcoordinate())
 print('Wait is Over!!!!')
 timeend=time.process_time()
 print('Total time taken:',timeend-timestart)
+print("Temperature-",particle.energy()/1500)
 
-
-
+### Generating Data of velocity distribution after simulation
 particle.velocity_distribution()
 np.save('data_set.npy',data_set,allow_pickle=True)
+
+
+
 print('donee!! step 1')
 print('Animation begins')
+
+
+
+
+
 '''def update_coordinate(i, scatter):
     particle.update()
     x, y, z = particle.getcoordinate()
