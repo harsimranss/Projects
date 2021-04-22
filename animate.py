@@ -6,9 +6,9 @@ v1=np.load('velocity_data1.npy',allow_pickle=True)
 v=np.load('velocity_data.npy',allow_pickle=True)
 import matplotlib.pyplot as plt
 plt.subplot(121)
-plt.hist(v1,bins=np.arange(-0.2,20,0.5))
+plt.hist(v1,bins=np.arange(0,40,1))
 plt.subplot(122)
-plt.hist(v,bins=np.arange(-0.2,20,0.5))
+plt.hist(v,bins=np.arange(0,40,1))
 plt.title("final")
 plt.show()
 def update_coordinate(i, scatter):
