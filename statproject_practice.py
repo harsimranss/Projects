@@ -51,13 +51,16 @@ class particle():
             obj.velocity = (vx,vy,vz)
         particle.time=particle.time+1
     def force(self):
+        ep = 0 # Well depth
+        d = 0 # diameter of particle
         f = (0, 0, 0)
         R = 1 # boundary of neighbourhood
         x0, y0, z0 = self.position
         for obj in self.neighbours:
             x, y, z = obj.position
             r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(3.5)
-            f = (f[0] -2*(x-x0)/r, f[1] -2*(y - y0)/r, f[2] - 2*(z - z0)/r)
+            p = 4 * ep * (12 * ((d**12)/(r**14)) - 6 * ((d**6)/(r**8)))
+            f = (f[0] + p * (x - x0), f[1] + p * (y - y0), f[2] + p * (z - z0))
         # changing accelaration so as to not calculate force for future config.
         self.accelaration=f
 
@@ -131,13 +134,13 @@ data_set=[]
 print('Working On it!!')
 ## Changing Directory
 import os
-os.chdir('/home/sarhandi/stat')
+os.chdir('/home/gurbir/my_stat_work/')
 
 ## creating velocity distribution data of initial values
 particle.velocity_distribution1()
 print('initial',particle.energy()/1500)
 ### Simulating system and saving it in data set
-for pp in range(20000):
+for pp in range(1000):
 	particle.update()
 	if particle.time%5==0:
             data_set.append(particle.getcoordinate())
