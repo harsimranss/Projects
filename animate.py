@@ -7,17 +7,17 @@ v=np.load('velocity_data.npy',allow_pickle=True)
 print('Mean v:',np.mean(v))
 import matplotlib.pyplot as plt
 plt.subplot(121)
-plt.hist(v1,bins=np.arange(0,40,1))
+plt.hist(v1,bins=np.arange(0,0.05,0.001))
 plt.subplot(122)
-plt.hist(v,bins=np.arange(0,60,1))
+plt.hist(v,bins=np.arange(0,0.05,0.001))
 plt.title("final")
 plt.show()
 def update_coordinate(i, scatter):
     x, y, z = a[i]
     ax.clear()
-    ax.set_xlim3d([-21,21])
-    ax.set_ylim3d([-21,21])
-    ax.set_zlim3d([-21,21])
+    ax.set_xlim3d([-61,61])
+    ax.set_ylim3d([-61,61])
+    ax.set_zlim3d([-61,61])
     scatter[0]=ax.scatter3D(x,y,z,color='green',marker=".")
 
 import mpl_toolkits.mplot3d.axes3d as mp

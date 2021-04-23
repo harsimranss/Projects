@@ -19,7 +19,7 @@ class particle():
 
     @classmethod
     def update(cls):
-        t=0.025
+        t=0.1
         th=t/2
         # updating neighbours
         if particle.time%2000==0:
@@ -77,9 +77,7 @@ class particle():
     @classmethod
     def update_neighbours(cls):
         R_critical=2.5 # 2.5*Sigma
-        
         for obj in cls.objects:
-            obj.neighbours=[]
             for obj2 in cls.objects:
                 x,y,z=obj.position
                 x1,y1,z1=obj2.position
@@ -145,10 +143,10 @@ class particle():
 
 def create():
     lists = []
-    v_da1=[]
     xj=0
     yj=1
     zj=1
+    v_da=np.load('v_da1.npy',allow_pickle=True)
     for i in range(343):
         xj=xj+1
         if xj%8==0:
@@ -160,34 +158,27 @@ def create():
         x = -30+(10*xj)
         y = -30+(10*yj)
         z = -30+(10*zj)
-        vx = 0.0001*rd.randint(-100,100)
-        vy = 0.0001*rd.randint(-100,100)
-        vz = 0.0001*rd.randint(-100,100)
-        v_da1.append((vx,vy,vz))
+        
+        vx,vy,vz=v_da[i]
         lists.append(particle((x, y, z), (vx, vy, vz)))
-    np.save("v_da1.npy",v_da1,allow_pickle=True)
-
-
-## Changing Directory
-import os
-os.chdir('/home/sarhandi/stat')
-t1=time.process_time()
 create()
+print("I am new stat")
 data_set=[]
 data_set2=[]
 print('Working On it!!')
+## Changing Directory
+import os
+os.chdir('/home/sarhandi/stat')
+
 ## creating velocity distribution data of initial values
 particle.velocity_distribution1()
-
 print('initial',particle.energy()*(6.27*10**6)/(3*343))
 ### Simulating system and saving it in data set
-t2=time.process_time()
-for pp in range(2000000):
+for pp in range(12500):
     particle.update()
-    if particle.time%4000==0:
+   # if particle.time%4000==0:
             #print("#", end="")
-            data_set.append(particle.getcoordinate())
-t3=time.process_time()
+            #data_set.append(particle.getcoordinate())
 data_set.append(particle.getcoordinate())
 data_set1=[]
 data_set1.append(particle.getvelocity())
@@ -195,7 +186,7 @@ print('Wait is Over!!!!')
 timeend=time.process_time()
 print('Total time taken:',timeend-timestart)
 print("Temperature-",particle.energy()*(6.27*10**6)/(3*343))
-print(t1,t2,t3)
+
 ### Generating Data of velocity distribution after simulation
 particle.velocity_distribution()
 np.save('data_set.npy',data_set,allow_pickle=True)
