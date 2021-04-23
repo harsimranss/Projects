@@ -51,14 +51,14 @@ class particle():
             obj.velocity = (vx,vy,vz)
         particle.time=particle.time+1
     def force(self):
-        ep = 0 # Well depth
-        d = 0 # diameter of particle
+        ep = 1 # Well depth
+        d = 0.7 # diameter of particle
         f = (0, 0, 0)
         R = 1 # boundary of neighbourhood
         x0, y0, z0 = self.position
         for obj in self.neighbours:
             x, y, z = obj.position
-            r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(3.5)
+            r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(0.5)
             p = 4 * ep * (12 * ((d**12)/(r**14)) - 6 * ((d**6)/(r**8)))
             f = (f[0] + p * (x - x0), f[1] + p * (y - y0), f[2] + p * (z - z0))
         # changing accelaration so as to not calculate force for future config.
@@ -66,7 +66,7 @@ class particle():
 
     @classmethod
     def update_neighbours(cls):
-        R_critical=2
+        R_critical=1
         for obj in cls.objects:
             for obj2 in cls.objects:
                 x,y,z=obj.position
@@ -120,7 +120,7 @@ class particle():
 
 def create():
     lists = []
-    for i in range(300):
+    for i in range(2000):
         x = 0.02*rd.randint(-1000,1000)
         y = 0.02*rd.randint(-1000,1000)
         z = 0.02*rd.randint(-1000,1000)
