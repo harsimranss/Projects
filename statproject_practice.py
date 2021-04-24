@@ -19,10 +19,10 @@ class particle():
 
     @classmethod
     def update(cls):
-        t=0.025
+        t=0.1
         th=t/2
         # updating neighbours
-        if particle.time%2000==0:
+        if particle.time%200==0:
             particle.update_neighbours()
         # updating accelaration before updating coordinates
         particle.update_ac()
@@ -70,7 +70,7 @@ class particle():
             x, y, z = obj.position
             r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(0.5)
             p = ep * (2 * ((1)/(r**14)) - 1 * ((1)/(r**8)))
-            f = (f[0] - p * (x - x0), f[1] - p * (y - y0), f[2] - p * (z - z0))
+            f = (f[0] -p * (x - x0), f[1] - p * (y - y0), f[2] - p * (z - z0))
         # changing accelaration so as to not calculate force for future config.
         self.accelaration=f
 
@@ -80,8 +80,8 @@ class particle():
         
         for obj in cls.objects:
             obj.neighbours=[]
+            x,y,z=obj.position
             for obj2 in cls.objects:
-                x,y,z=obj.position
                 x1,y1,z1=obj2.position
                 r=((x-x1)**2+(y-y1)**2+(z-z1)**2)**0.5
                 if r<R_critical and r>0:
@@ -149,7 +149,7 @@ def create():
     xj=0
     yj=1
     zj=1
-    for i in range(343):
+    for i in range(100):
         xj=xj+1
         if xj%8==0:
             yj=yj+1
@@ -160,12 +160,12 @@ def create():
         x = -30+(10*xj)
         y = -30+(10*yj)
         z = -30+(10*zj)
-        vx = 0.0001*rd.randint(-100,100)
-        vy = 0.0001*rd.randint(-100,100)
-        vz = 0.0001*rd.randint(-100,100)
+        vx = 0.0001*rd.randint(-100,100)/1.414
+        vy = 0.0001*rd.randint(-100,100)/1.414
+        vz = 0.0001*rd.randint(-100,100)/1.414
         v_da1.append((vx,vy,vz))
         lists.append(particle((x, y, z), (vx, vy, vz)))
-    np.save("v_da1.npy",v_da1,allow_pickle=True)
+    np.save("v_da1.npy",v_da1)
 
 
 ## Changing Directory
@@ -179,10 +179,10 @@ print('Working On it!!')
 ## creating velocity distribution data of initial values
 particle.velocity_distribution1()
 
-print('initial',particle.energy()*(6.27*10**6)/(3*343))
+print('initial',particle.energy()*(6.27*10**6)/(3*100))
 ### Simulating system and saving it in data set
 t2=time.process_time()
-for pp in range(2000000):
+for pp in range(1000):
     particle.update()
     if particle.time%4000==0:
             #print("#", end="")
@@ -194,7 +194,7 @@ data_set1.append(particle.getvelocity())
 print('Wait is Over!!!!')
 timeend=time.process_time()
 print('Total time taken:',timeend-timestart)
-print("Temperature-",particle.energy()*(6.27*10**6)/(3*343))
+print("Temperature-",particle.energy()*(6.27*10**6)/(3*100))
 print(t1,t2,t3)
 ### Generating Data of velocity distribution after simulation
 particle.velocity_distribution()

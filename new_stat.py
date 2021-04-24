@@ -19,10 +19,10 @@ class particle():
 
     @classmethod
     def update(cls):
-        t=0.1
+        t=0.05
         th=t/2
         # updating neighbours
-        if particle.time%2000==0:
+        if particle.time%200==0:
             particle.update_neighbours()
         # updating accelaration before updating coordinates
         particle.update_ac()
@@ -70,16 +70,18 @@ class particle():
             x, y, z = obj.position
             r=((x-x0)**2+(y-y0)**2 +(z-z0)**2)**(0.5)
             p = ep * (2 * ((1)/(r**14)) - 1 * ((1)/(r**8)))
-            f = (f[0] - p * (x - x0), f[1] - p * (y - y0), f[2] - p * (z - z0))
+            f = (f[0] -p * (x - x0), f[1] - p * (y - y0), f[2] - p * (z - z0))
         # changing accelaration so as to not calculate force for future config.
         self.accelaration=f
 
     @classmethod
     def update_neighbours(cls):
         R_critical=2.5 # 2.5*Sigma
+        
         for obj in cls.objects:
+            obj.neighbours=[]
+            x,y,z=obj.position
             for obj2 in cls.objects:
-                x,y,z=obj.position
                 x1,y1,z1=obj2.position
                 r=((x-x1)**2+(y-y1)**2+(z-z1)**2)**0.5
                 if r<R_critical and r>0:
@@ -147,7 +149,7 @@ def create():
     yj=1
     zj=1
     v_da=np.load('v_da1.npy',allow_pickle=True)
-    for i in range(343):
+    for i in range(100):
         xj=xj+1
         if xj%8==0:
             yj=yj+1
@@ -155,38 +157,42 @@ def create():
         if yj%8==0:
             zj=zj+1
             yj=1
-        x = -30+(10*xj)
-        y = -30+(10*yj)
-        z = -30+(10*zj)
+        x = -30+(2**(1/6)*xj)
+        y = -30+(2**(1/6)*yj)
+        z = -30+(2**(1/6)*zj)
         
-        vx,vy,vz=v_da[i]
+        vx,vy,vz=(float(v_da[i][0]),float(v_da[i][1]),float(v_da[i][2]))
         lists.append(particle((x, y, z), (vx, vy, vz)))
-create()
-print("I am new stat")
-data_set=[]
-data_set2=[]
-print('Working On it!!')
+
+
 ## Changing Directory
 import os
 os.chdir('/home/sarhandi/stat')
-
+t1=time.process_time()
+create()
+data_set=[]
+data_set2=[]
+print('Working On it!!')
 ## creating velocity distribution data of initial values
 particle.velocity_distribution1()
-print('initial',particle.energy()*(6.27*10**6)/(3*343))
+
+print('initial',particle.energy()*(6.27*10**6)/(3*100))
 ### Simulating system and saving it in data set
-for pp in range(12500):
+t2=time.process_time()
+for pp in range(40000):
     particle.update()
-   # if particle.time%4000==0:
+    if particle.time%4000==0:
             #print("#", end="")
-            #data_set.append(particle.getcoordinate())
+            data_set.append(particle.getcoordinate())
+t3=time.process_time()
 data_set.append(particle.getcoordinate())
 data_set1=[]
 data_set1.append(particle.getvelocity())
 print('Wait is Over!!!!')
 timeend=time.process_time()
 print('Total time taken:',timeend-timestart)
-print("Temperature-",particle.energy()*(6.27*10**6)/(3*343))
-
+print("Temperature-",particle.energy()*(6.27*10**6)/(3*100))
+print(t1,t2,t3)
 ### Generating Data of velocity distribution after simulation
 particle.velocity_distribution()
 np.save('data_set.npy',data_set,allow_pickle=True)

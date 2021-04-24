@@ -23,6 +23,9 @@ def update_coordinate(i, scatter):
 import mpl_toolkits.mplot3d.axes3d as mp
 import matplotlib.animation as animation
 
+Writer = animation.writers['ffmpeg']
+writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+
 fig=plt.figure()
 ax = plt.axes(projection ="3d")
 ax.set_xlim3d([-21,21])
@@ -32,5 +35,6 @@ ax.set_title("Scatter Animation")
 x,y,z=a[0]
 scatter=[ax.scatter3D(x,y,z,color='green')]
 
-anim=animation.FuncAnimation(fig,update_coordinate,len(a),fargs=(scatter,),interval=10)
+anim=animation.FuncAnimation(fig,update_coordinate,len(a),fargs=(scatter,),interval=50)
+anim.save("LJ_Potential.mp4",writer=writer)
 plt.show()
