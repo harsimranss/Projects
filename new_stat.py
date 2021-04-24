@@ -179,9 +179,9 @@ particle.velocity_distribution1()
 print('initial',particle.energy()*(6.27*10**6)/(3*100))
 ### Simulating system and saving it in data set
 t2=time.process_time()
-for pp in range(40000):
+for pp in range(100000):
     particle.update()
-    if particle.time%4000==0:
+    if particle.time%1000==0:
             #print("#", end="")
             data_set.append(particle.getcoordinate())
 t3=time.process_time()
